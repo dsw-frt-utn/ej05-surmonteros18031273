@@ -26,7 +26,13 @@ public class ConsoleView
             }
             else if (opcion == "2")
             {
-                Console.WriteLine("Agregando vehículo...");
+                Console.WriteLine("");
+                Console.WriteLine(" Esta opcion no esta disponible.");
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine("");
+                Console.WriteLine("Presione una tecla para salir...");
+                Console.ReadKey();
+                Console.Clear();
             }
         }
         while (opcion != "3");
@@ -65,13 +71,13 @@ public class ConsoleView
     private static void ListarVehiculos()
     {
         LimpiarPantalla();
-        string[] columnas = { "Patente", "Vehículo", "Tipo", "Cap. Carga", "Km/l", "Año", "L.Extra", "Kms a recorrer" };
+        string[] columnas = { "Patente", "Vehículo", "Tipo", "Cap. Carga", "Km/l  |km/Kwh", "Año", "L.Extra", "Kms a recorrer" };
         DibujarEncabezado(columnas);
         DibjuarDatos(columnas.Length);
         DibujarLinea();
         Console.Write("\n");
         Console.Write("\n");
-        Console.WriteLine("Presione una tecla para calcular el total de consumos...");
+        Console.WriteLine("Presione ENTER para calcular el total de consumos...");
         Console.ReadLine();
         Dictionary<string, double> vehiculos = new Dictionary<string, double>();
         foreach (VehiculoViewModel vehiculo in _vehiculos)
@@ -86,7 +92,8 @@ public class ConsoleView
         Console.Write("\n");
         Console.Write("\n");
         Console.WriteLine("Presione una tecla para salir...");
-        Console.ReadLine();
+        Console.ReadKey();
+        Console.Clear();
     }
     private static void DibujarEncabezado(params string[] columnas)
     {
@@ -120,13 +127,27 @@ public class ConsoleView
             CentrarTexto(vehiculo.GetCapacidadCarga().ToString(), out l, ancho - 1, false);
             Console.Write("".PadRight(ancho - 1 - l));
             Console.Write("|");
-            CentrarTexto(vehiculo.GetKmPorLitro().ToString(), out l, ancho - 1, false);
+            if (vehiculo.GetTipo() == "Electrico")
+            {
+                CentrarTexto("- | 16", out l, ancho - 1, false);
+            }
+            else
+            {
+                CentrarTexto(vehiculo.GetKmPorLitro().ToString()+" | - ", out l, ancho - 1, false);
+            }
             Console.Write("".PadRight(ancho - 1 - l));
             Console.Write("|");
             CentrarTexto(vehiculo.GetAnio().ToString(), out l, ancho - 1, false);
             Console.Write("".PadRight(ancho - 1 - l));
             Console.Write("|");
-            CentrarTexto(vehiculo.GetLitrosExtra().ToString(), out l, ancho - 1, false);
+            if (vehiculo.GetTipo() == "Electrico")
+            {
+                CentrarTexto("-", out l, ancho - 1, false);
+            }
+            else
+            {
+                CentrarTexto(vehiculo.GetLitrosExtra().ToString(), out l, ancho - 1, false);
+            }
             Console.Write("".PadRight(ancho - 1 - l));
             Console.Write("|");
             CentrarTexto(vehiculo.GetKmARecorrer().ToString(), out l, ancho - 1, false);
